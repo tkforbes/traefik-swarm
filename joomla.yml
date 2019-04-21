@@ -1,0 +1,27 @@
+version: "3"
+services:
+  joomla:
+    image: joomla
+    networks:
+      - default
+      - traefik-net
+    environment:
+      JOOMLA_DB_HOST: joomladb
+      JOOMLA_DB_PASSWORD: example
+    deploy:
+      labels:
+        - "traefik.port=80"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:joomla.traefik.local"
+
+  joomladb:
+    image: mysql:5.7
+    networks:
+      - traefik-net
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+
+networks:
+  traefik-net:
+    external: true
