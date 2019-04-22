@@ -13,10 +13,6 @@ address = ":8080"
   [entryPoints.https]
   address = ":443"
     [entryPoints.https.tls]
-#
-# [acme]
-# email = "your_email@example.com"
-# storage = "acme.json"
-# entryPoint = "https"
-# onHostRule = false
-# onDemand = false
+    [[entryPoints.https.tls.certificates]]
+    certFile = "traefik.crt"
+    keyFile = "traefik.key"
