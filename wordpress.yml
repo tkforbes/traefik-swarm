@@ -1,14 +1,16 @@
 version: "3"
 services:
   blog:
-    image: wordpress:4.7.5-apache
+    image: wordpress:5.1.1-apache
     environment:
-      WORDPRESS_DB_PASSWORD:
-
-
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
     networks:
       - default
       - traefik-net
+      - mysql-net
     deploy:
       labels:
         - "traefik.port=80"
@@ -18,10 +20,14 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_ROOT_PASSWORD: examplepass
     networks:
-      - traefik-net
+      - mysql-net
 
 networks:
   traefik-net:
     external: true
+  mysql-net:

@@ -5,6 +5,7 @@ services:
     networks:
       - default
       - traefik-net
+      - db-net
     environment:
       JOOMLA_DB_HOST: joomladb
       JOOMLA_DB_PASSWORD: example
@@ -17,7 +18,7 @@ services:
   joomladb:
     image: mysql:5.7
     networks:
-      - traefik-net
+      - db-net
     environment:
       MYSQL_ROOT_PASSWORD: example
 
@@ -25,3 +26,4 @@ services:
 networks:
   traefik-net:
     external: true
+  db-net:
