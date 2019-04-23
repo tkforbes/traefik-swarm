@@ -8,9 +8,27 @@ The project will procede through a number of iterations that will progressively
 add improved Docker functionality and incorporate security, such as through
 Docker secrets.
 
-Create the traefik service with the following command:
+# Once-only environment setup
 
+Your docker needs to be in swarm mode. Create a single node swarm with this command:
+````
+docker swarm init --advertise-addr 10.117.xxx.yyy
+````
+
+An overlay network called traefik-net needs to be present. You only need to do this once:
+````
+docker network create --driver=overlay traefik-net
+````
+
+# To run the stacks
+
+Create the traefik reverse-proxy service with the following command:
+````
 docker service create --name traefik --constraint=node.role==manager --publish 80:80 --publish 443:443 --publish 8080:8080 --mount type=bind,source=$PWD/traefik.key,target=/traefik.key --mount type=bind,source=$PWD/traefik.crt,target=/traefik.crt --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mount type=bind,source=$PWD/traefik.toml,target=/etc/traefik/traefik.toml --network traefik-net traefik --docker --docker.swarmMode --docker.domain=traefik --docker.watch --api
-
-
-and then launch a stack (yml file) with a regular docker stack command.
+````
+Traefik is now ready to direct traffic to any properly configured stack. Deploy
+any combination of stack samples e.g.:
+````
+docker stack deploy -c whoami.yml whoami
+docker stack deploy -c wordpress.yml wordpress
+````
