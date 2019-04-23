@@ -10,6 +10,7 @@ Docker secrets.
 
 # Once-only environment setup
 
+<<<<<<< HEAD
 Your docker needs to be in swarm mode. Create a single node swarm with this command:
 ````
 docker swarm init --advertise-addr 10.117.xxx.yyy
@@ -21,6 +22,11 @@ docker network create --driver=overlay traefik-net
 ````
 
 # To run the stacks
+=======
+```
+docker service create --name traefik --constraint=node.role==manager --publish 80:80 --publish 443:443 --publish 8080:8080 --mount type=bind,source=$PWD/traefik.key,target=/traefik.key --mount type=bind,source=$PWD/traefik.crt,target=/traefik.crt --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock --mount type=bind,source=$PWD/traefik.toml,target=/etc/traefik/traefik.toml --network traefik-net traefik --docker --docker.swarmMode --docker.domain=traefik --docker.watch --api
+```
+>>>>>>> 9d85152cbbcc7c3b8516c2696d7154806e6715d6
 
 Create the traefik reverse-proxy service with the following command:
 ````
